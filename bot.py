@@ -8,7 +8,7 @@ from database import users_collection
 
 logging.basicConfig(level=logging.INFO)
 
-BOT_TOKEN = "9090771899:AAGm3Gh3QdZr-DvHaYdhxoUlLDmhNm55K9Y"
+BOT_TOKEN = "9090771899:AAHHUdTfGqDZ2S-LlcQNeGxcZwE0fGjJhCI"
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
