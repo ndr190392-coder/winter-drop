@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winter Drop CS2</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="snow-container"></div>
+
+    <header>
+        <div class="user-info">
+            <span id="username">Игрок</span>
+            <div class="balance-box">❄️ <span id="balance">0.00</span></div>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" onclick="switchTab('cases')">🎁 Кейсы</button>
+        <button class="tab-btn" onclick="switchTab('tasks')">📅 Задания</button>
+        <button class="tab-btn" onclick="switchTab('profile')">👤 Профиль</button>
+    </nav>
+
+    <main>
+        <!-- Вкладка Кейсов -->
+        <section id="cases-tab" class="tab-content active">
+            <div class="cases-grid">
+                <div class="case-card" onclick="selectCase('snow_starter')">
+                    <img src="https://cdna.artstation.com/p/assets/images/images/032/873/068/large/case.jpg" alt="Case">
+                    <h3>❄️ Снежный Старт</h3>
+                    <p class="price">5.00 ❄️</p>
+                </div>
+                <div class="case-card" onclick="selectCase('frost_box')">
+                    <img src="https://cdna.artstation.com/p/assets/images/images/032/873/068/large/case.jpg" alt="Case">
+                    <h3>☃️ Морозный Сундук</h3>
+                    <p class="price">20.00 ❄️</p>
+                </div>
+                <div class="case-card" onclick="selectCase('ice_king')">
+                    <img src="https://cdna.artstation.com/p/assets/images/images/032/873/068/large/case.jpg" alt="Case">
+                    <h3>🧊 Ледяной Дракон</h3>
+                    <p class="price">50.00 ❄️</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Модалка Рулетки -->
+        <div id="roulette-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="modal-case-title">Открытие кейса</h2>
+                <div class="roulette-wrapper">
+                    <div class="pointer"></div>
+                    <div class="roulette-track" id="track"></div>
+                </div>
+                <button id="spin-btn" class="action-btn" onclick="spin()">Открыть Кейс</button>
+                <button class="close-btn" onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
+
+        <!-- Вкладка Заданий -->
+        <section id="tasks-tab" class="tab-content">
+            <div class="task-card">
+                <h3>❄️ Ежедневная Снежинка</h3>
+                <p>Заходи каждый день и получай от 2 до 5 ❄️ монеток бесплатно!</p>
+                <button class="action-btn" onclick="claimDaily()">Забрать бонус</button>
+            </div>
+        </section>
+
+        <!-- Вкладка Профиля -->
+        <section id="profile-tab" class="tab-content">
+            <div class="profile-card">
+                <h3>Привязка Steam ID</h3>
+                <p>Нельзя привязать 1 Steam аккаунт к 2 профилям Telegram!</p>
+                <input type="text" id="steam-input" placeholder="Введите ваш SteamID64">
+                <button class="action-btn" onclick="linkSteam()">Сохранить Steam</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
