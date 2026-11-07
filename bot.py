@@ -8,7 +8,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 logging.basicConfig(level=logging.INFO)
 
-BOT_TOKEN = "9090771899:AAHHUdTfGqDZ2S-LIcQNeGxZWE0fGjlhCI"
+BOT_TOKEN = "9090771899:AAGTT3MKobwGS5rc8WkRkToe1SlTd52Egug"
 MONGO_URI = "mongodb+srv://ndr190392_db_user:510SqIvxrAVWsWfo@cluster0.meedhth.mongodb.net/"
 
 bot = Bot(token=BOT_TOKEN)
