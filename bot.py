@@ -8,7 +8,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 logging.basicConfig(level=logging.INFO)
 
-# Жорстко прописуємо дані, щоб виключити проблеми зі змінними на Render
 BOT_TOKEN = "9090771899:AAHHUdTfGqDZ2S-LIcQNeGxZWE0fGjlhCI"
 MONGO_URI = "mongodb+srv://ndr190392_db_user:510SqIvxrAVWsWfo@cluster0.meedhth.mongodb.net/"
 
@@ -25,14 +24,17 @@ async def cmd_start(message: types.Message):
         "Жми на кнопку ниже, чтобы открыть мини-приложение и испытать удачу!"
     )
 
+# Обробник головної сторінки (тепер бере index.html з папки webapp)
 async def index_handler(request):
-    return web.FileResponse('./index.html')
+    return web.FileResponse('./webapp/index.html')
 
 async def web_server():
     app = web.Application()
     app.router.add_get('/', index_handler)
-    if os.path.exists('static'):
-        app.router.add_static('/static/', path='static', show_index=False)
+    
+    # Роздаємо статику (CSS, JS) із папки webapp
+    if os.path.exists('webapp'):
+        app.router.add_static('/static/', path='webapp', show_index=False)
     
     runner = web.AppRunner(app)
     await runner.setup()
