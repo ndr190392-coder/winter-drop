@@ -10,7 +10,10 @@ logging.basicConfig(level=logging.INFO)
 
 # Токен твого бота та налаштування
 BOT_TOKEN = "9090771899:AAHHUdTfGqDZ2S-LIcQNeGxZWE0fGjlhCI"
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://admin:admin@cluster.mongodb.net/?retryWrites=true&w=majority")
+MONGO_URI = os.getenv("MONGO_URI")
+
+if not MONGO_URI:
+    raise ValueError("Помилка: не знайдено змінну середовища MONGO_URI!")
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
