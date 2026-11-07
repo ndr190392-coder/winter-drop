@@ -18,19 +18,16 @@ async def cmd_start(message: types.Message):
     user_id = message.from_user.id
     username = message.from_user.username or message.from_user.first_name
     
-    # Реєструємо гравця в базі, якщо його ще немає
     existing_user = await users_collection.find_one({"user_id": user_id})
     if not existing_user:
         await users_collection.insert_one({
             "user_id": user_id,
             "username": username,
-            "balance": 100.0,  # Стартовий бонус
+            "balance": 100.0,
             "steam_id": None
         })
     
-    # Кнопка для відкриття Mini App (посилання згенерує Render, або вкажи заглушку / локал, але для вебсервера нижче підійде шлях)
-    # Зверни увагу: тут ми вказуємо вебсервер, який підніметься нижче
-    webapp_url = os.getenv("WEBAPP_URL", "https://winter-drop-bot.onrender.com") # Твоя силка на Render або залиш як є
+    webapp_url = os.getenv("WEBAPP_URL", "https://winter-drop-bot.onrender.com")
     
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❄️ Відкрити Winter Drop", web_app=WebAppInfo(url=webapp_url))]
@@ -45,7 +42,6 @@ async def cmd_start(message: types.Message):
         parse_mode="Markdown"
     )
 
-# --- API для Web App (щоб сайт спілкувався з базою) ---
 async def api_get_user(request):
     user_id = int(request.query.get("user_id", 0))
     user = await users_collection.find_one({"user_id": user_id})
@@ -65,10 +61,8 @@ async def api_open_case(request):
     if not user or user.get("balance", 0) < price:
         return web.json_response({"success": False, "msg": "Недостатньо сніжинок!"})
     
-    # Списуємо баланс
     new_balance = user["balance"] - price
     
-    # Дроп (імітація рулетки)
     import random
     items = [
         {"name": "P250 | Sand Dune", "rarity": "consumer"},
@@ -77,13 +71,12 @@ async def api_open_case(request):
     ]
     won_item = random.choice(items)
     if won_item["rarity"] == "covert":
-        new_balance += price * 5  фотка/виграш
+        new_balance += price * 5
         
     await users_collection.update_one({"user_id": user_id}, {"$set": {"balance": new_balance}})
     
-    # Генеруємо стрічку рулетки
     tape = [random.choice(items) for _ in range(15)]
-    tape[9] = won_item  # Переможний елемент
+    tape[9] = won_item
     
     return web.json_response({
         "success": True,
@@ -111,21 +104,16 @@ async def api_link_steam(request):
     await users_collection.update_one({"user_id": user_id}, {"$set": {"steam_id": steam_id}})
     return web.json_response({"success": True, "msg": "Steam ID успішно збережено!"})
 
-# Налаштування вебсервера для папки webapp та API
 async def web_server_runner():
     app = web.Application()
     app.router.add_get('/api/user', api_get_user)
     app.router.add_post('/api/open_case', api_open_case)
     app.router.add_post('/api/daily', api_daily)
     app.router.add_post('/api/link_steam', api_link_steam)
-    
-    # Роздача статичних файлів сайту з папки webapp
     app.router.add_static('/', path='./webapp', show_index=True)
-    
     return app
 
 async def main():
-    # Запускаємо вебсервер на порті, який виділяє Render (або 10000 за замовчуванням)
     port = int(os.environ.get("PORT", 10000))
     app = await web_server_runner()
     runner = web.AppRunner(app)
@@ -134,7 +122,6 @@ async def main():
     await site.start()
     logging.info(f"Web server started on port {port}")
     
-    # Запускаємо бота в поточному процесі
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
